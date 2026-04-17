@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException, Header
+from fastapi import APIRouter, HTTPException, Header, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from database import supabase
 import jwt
 import datetime
@@ -9,28 +10,53 @@ from models.entreprise import Entreprise, LoginData
 
 router = APIRouter()
 
+# =========================
+# CONFIG
+# =========================
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 
-# =========================
-# JWT VERIFY ADMIN
-# =========================
+security = HTTPBearer()
 
+
+# =========================
+# GET CURRENT USER (JWT)
+# =========================
+def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    try:
+        token = credentials.credentials
+
+        decoded = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+
+        return {
+            "email": decoded.get("email"),
+            "role": decoded.get("role"),
+            "entreprise_id": decoded.get("entreprise_id")
+        }
+
+    except Exception:
+        raise HTTPException(status_code=401, detail="Token invalide")
+
+
+# =========================
+# VERIFY ADMIN
+# =========================
 def verify_admin(token: str):
     try:
         decoded = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+
         if decoded.get("role") != "admin":
             raise HTTPException(status_code=403, detail="Accès refusé")
-    except:
+
+    except Exception:
         raise HTTPException(status_code=401, detail="Token invalide")
 
 
 # =========================
 # REGISTER ENTREPRISE
 # =========================
-
 @router.post("/register")
 def register(entreprise: Entreprise):
 
@@ -59,7 +85,6 @@ def register(entreprise: Entreprise):
 # =========================
 # LOGIN (ADMIN + ENTREPRISE)
 # =========================
-
 @router.post("/login")
 def login(data: LoginData):
 
@@ -98,7 +123,8 @@ def login(data: LoginData):
 
     token = jwt.encode({
         "role": "entreprise",
-        "email": data.email,
+        "email": user["email"],
+        "entreprise_id": user["id"],  # 🔥 IMPORTANT
         "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=2)
     }, SECRET_KEY, algorithm="HS256")
 
@@ -115,7 +141,6 @@ def login(data: LoginData):
 # =========================
 # ADMIN - GET ENTREPRISES
 # =========================
-
 @router.get("/admin/entreprises")
 def get_entreprises(authorization: str = Header(None)):
 
@@ -130,17 +155,15 @@ def get_entreprises(authorization: str = Header(None)):
 # =========================
 # ADMIN - VALIDATE ENTREPRISE
 # =========================
-
 @router.put("/admin/validate/{id}")
 def validate(id: str, authorization: str = Header(None)):
 
     token = authorization.replace("Bearer ", "")
     verify_admin(token)
 
-    response = supabase.table("entreprise") \
+    supabase.table("entreprise") \
         .update({"statut": "approved"}) \
         .eq("id", id) \
         .execute()
 
-    return {"message": "Entreprise validée"} 
-
+    return {"message": "Entreprise validée"}

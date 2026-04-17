@@ -64,7 +64,7 @@ export default function Home() {
     {
       icon: <Zap className="w-6 h-6 text-blue-600" />,
       title: "Ultra rapide",
-      description: "Temps de réponse instantané pour vos chatbots"
+      description: "Temps de réponse instantané pour vos chatbot"
     },
     {
       icon: <Shield className="w-6 h-6 text-blue-600" />,
@@ -79,7 +79,7 @@ export default function Home() {
     {
       icon: <Users className="w-6 h-6 text-blue-600" />,
       title: "Multi-utilisateurs",
-      description: "Gérez plusieurs chatbots facilement"
+      description: "Gérez plusieurs chatbot facilement"
     },
     {
       icon: <Clock className="w-6 h-6 text-blue-600" />,
@@ -94,7 +94,7 @@ export default function Home() {
   ];
 
   const stats = [
-    { value: "10k+", label: "Chatbots créés" },
+    { value: "10k+", label: "chatbot créés" },
     { value: "98%", label: "Satisfaction client" },
     { value: "24/7", label: "Support disponible" },
     { value: "50+", label: "Intégrations" }
@@ -107,12 +107,12 @@ export default function Home() {
         {/* Badge */}
         <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-full text-sm mb-6 animate-pulse">
           <Sparkles className="w-4 h-4" />
-          <span>✨ La nouvelle génération de chatbots IA</span>
+          <span>✨ La nouvelle génération de chatbot IA</span>
         </div>
 
         {/* Main title */}
         <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-          Créez des chatbots
+          Créez des chatbot
           <br />
           <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             vraiment intelligents
@@ -122,7 +122,7 @@ export default function Home() {
         {/* Description */}
         <p className="text-lg md:text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl mb-10">
           Plateforme SaaS puissante avec FastAPI, JWT et Supabase. 
-          Créez, entraînez et déployez vos chatbots en quelques minutes.
+          Créez, entraînez et déployez vos chatbot en quelques minutes.
         </p>
 
         {/* CTA Button */}
@@ -148,7 +148,7 @@ export default function Home() {
               Fonctionnalités puissantes
             </h2>
             <p className="text-lg text-zinc-600 dark:text-zinc-400">
-              Tout ce dont vous avez besoin pour créer des chatbots exceptionnels
+              Tout ce dont vous avez besoin pour créer des chatbot exceptionnels
             </p>
           </div>
 

@@ -4,7 +4,7 @@ class ChatbotCreate(BaseModel):
     nom: str
     domaine: str | None = None
     statut: str = "actif"
-    entreprise_id: str
+    
 
 
 class ChatbotUpdate(BaseModel):

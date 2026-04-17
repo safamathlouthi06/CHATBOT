@@ -72,7 +72,7 @@ export default function LoginPage() {
             <div className="w-8 h-8 bg-white/20 rounded-xl backdrop-blur-sm flex items-center justify-center">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
-            <span className="text-white font-semibold text-lg">ChatBotStudio</span>
+            <span className="text-white font-semibold text-lg">chatbottudio</span>
           </div>
           
           <div className="space-y-6">
@@ -82,7 +82,7 @@ export default function LoginPage() {
                 <span className="text-white/80 text-xs">Plateforme IA nouvelle génération</span>
               </div>
               <h2 className="text-4xl font-bold text-white leading-tight">
-                Créez des chatbots<br />
+                Créez des chatbot<br />
                 <span className="bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-transparent">
                   intelligents en quelques minutes
                 </span>
@@ -105,7 +105,7 @@ export default function LoginPage() {
           </div>
           
           <div className="text-white/40 text-xs">
-            © 2024 ChatBotStudio. Tous droits réservés.
+            © 2024 chatbottudio. Tous droits réservés.
           </div>
         </div>
       </div>
