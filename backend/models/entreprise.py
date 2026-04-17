@@ -1,7 +1,8 @@
 from pydantic import BaseModel
 
 
-class EntrepriseCreate(BaseModel):
+
+class Entreprise(BaseModel):
     nomentreprise: str
     secteurd_activite: str
     email: str
@@ -11,3 +12,5 @@ class EntrepriseCreate(BaseModel):
 class LoginData(BaseModel):
     email: str
     password: str
+
+
