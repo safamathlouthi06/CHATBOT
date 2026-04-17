@@ -5,7 +5,7 @@ import datetime
 import bcrypt
 import os
 
-from models.entreprise import EntrepriseCreate, LoginData
+from models.entreprise import Entreprise, LoginData
 
 router = APIRouter()
 
@@ -32,7 +32,7 @@ def verify_admin(token: str):
 # =========================
 
 @router.post("/register")
-def register(entreprise: EntrepriseCreate):
+def register(entreprise: Entreprise):
 
     hashed_password = bcrypt.hashpw(
         entreprise.password.encode("utf-8"),
