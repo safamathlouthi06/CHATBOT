@@ -39,7 +39,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/dashboard/chatbots", label: "Chatbots", icon: Bot },
+    { href: "/dashboard/chatbots", label: "chatbots", icon: Bot },
     { href: "/dashboard/stats", label: "Statistiques", icon: BarChart3 },
     { href: "/dashboard/teams", label: "Équipes", icon: Users },
     { href: "/dashboard/settings", label: "Paramètres", icon: Settings },
@@ -74,7 +74,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
             {!sidebarCollapsed && (
               <span className="font-bold text-lg">
-                ChatBotStudio
+                chatbottudio
               </span>
             )}
           </Link>

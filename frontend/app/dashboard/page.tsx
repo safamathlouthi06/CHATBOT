@@ -28,7 +28,7 @@ export default function DashboardPage() {
           </h1>
           <p className="text-gray-500 dark:text-gray-400 mt-2 flex items-center gap-2">
             <Sparkles className="w-4 h-4" />
-            Bienvenue sur votre plateforme de création de chatbots intelligents
+            Bienvenue sur votre plateforme de création de chatbot intelligents
           </p>
         </div>
       </div>
@@ -36,7 +36,7 @@ export default function DashboardPage() {
       {/* STATS CARDS WITH GLASS EFFECT */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
         <StatCard
-          title="Chatbots Actifs"
+          title="chatbot Actifs"
           value="2"
           total="3"
           icon={<Bot className="w-6 h-6 text-blue-500" />}
@@ -87,7 +87,7 @@ export default function DashboardPage() {
             href="/dashboard/chatbots/create"
           />
           <ActionCard
-            title="Gérer les Chatbots"
+            title="Gérer les chatbot"
             desc="Voir tous vos assistants"
             icon={<Bot className="w-5 h-5" />}
             color="purple"
@@ -103,11 +103,11 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* RECENT CHATBOTS WITH IMPROVED DESIGN */}
+      {/* RECENT chatbot WITH IMPROVED DESIGN */}
       <div className="border border-gray-200 dark:border-gray-800 rounded-2xl bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm p-6">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h2 className="text-lg font-semibold">Chatbots récents</h2>
+            <h2 className="text-lg font-semibold">chatbot récents</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
               Vos derniers assistants modifiés
             </p>

@@ -1,15 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CreateChatbotPage() {
+  const router = useRouter();
+
   const [form, setForm] = useState({
-    name: "",
+    nom: "",
+    domaine: "",
+    statut: "actif",
     description: "",
     role: "Support Client",
     tone: "Professionnel",
     example: "Bonjour ! En quoi puis-je vous être utile ?",
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -17,21 +24,50 @@ export default function CreateChatbotPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log("DATA:", form);
+    try {
+      setLoading(true);
 
-    // 👉 ici tu connectes avec ton backend (FastAPI)
-    // fetch("http://localhost:8000/chatbots", { method: "POST", ... })
+      const token = localStorage.getItem("token");
 
-    alert("Chatbot créé !");
+      const res = await fetch("http://127.0.0.1:8000/chatbot/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          nom: form.nom,
+          domaine: form.domaine,
+          statut: form.statut,
+        }),
+      });
+
+      const data = await res.json();
+
+      console.log("CHATBOT CREATED:", data);
+
+      if (!res.ok) {
+        throw new Error(data?.detail || "Erreur création chatbot");
+      }
+
+      // ✅ SUCCESS → redirect liste
+      router.push("/dashboard/chatbots");
+
+    } catch (error) {
+      console.error("ERROR:", error);
+      alert("Erreur lors de la création du chatbot");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
       <div className="max-w-2xl mx-auto bg-white rounded-xl shadow p-6">
-        
+
         <h1 className="text-2xl font-bold mb-2">
           Créer un nouveau chatbot
         </h1>
@@ -43,46 +79,33 @@ export default function CreateChatbotPage() {
 
           {/* Nom */}
           <div>
-            <label className="block font-medium mb-1">
-              Nom du chatbot *
-            </label>
+            <label className="block font-medium mb-1">Nom *</label>
             <input
               type="text"
-              name="name"
-              placeholder="Ex: Assistant Client Pro"
-              value={form.name}
+              name="nom"
+              value={form.nom}
               onChange={handleChange}
               className="w-full border rounded-lg p-2 bg-gray-50"
               required
             />
-            <p className="text-sm text-gray-400">
-              Le nom qui identifiera votre chatbot
-            </p>
           </div>
 
-          {/* Description */}
+          {/* Domaine */}
           <div>
-            <label className="block font-medium mb-1">
-              Description *
-            </label>
-            <textarea
-              name="description"
-              placeholder="Ex: Assistant de support client disponible 24/7..."
-              value={form.description}
+            <label className="block font-medium mb-1">Domaine *</label>
+            <input
+              type="text"
+              name="domaine"
+              value={form.domaine}
               onChange={handleChange}
               className="w-full border rounded-lg p-2 bg-gray-50"
               required
             />
-            <p className="text-sm text-gray-400">
-              Décrivez brièvement le rôle de votre chatbot
-            </p>
           </div>
 
           {/* Rôle */}
           <div>
-            <label className="block font-medium mb-1">
-              Rôle du chatbot *
-            </label>
+            <label className="block font-medium mb-1">Rôle</label>
             <select
               name="role"
               value={form.role}
@@ -97,9 +120,7 @@ export default function CreateChatbotPage() {
 
           {/* Ton */}
           <div>
-            <label className="block font-medium mb-1">
-              Ton de communication *
-            </label>
+            <label className="block font-medium mb-1">Ton</label>
             <select
               name="tone"
               value={form.tone}
@@ -114,9 +135,7 @@ export default function CreateChatbotPage() {
 
           {/* Exemple */}
           <div>
-            <label className="block font-medium mb-1">
-              Exemple de réponse
-            </label>
+            <label className="block font-medium mb-1">Exemple</label>
             <textarea
               name="example"
               value={form.example}
@@ -129,6 +148,7 @@ export default function CreateChatbotPage() {
           <div className="flex justify-between pt-4">
             <button
               type="button"
+              onClick={() => router.back()}
               className="px-4 py-2 rounded-lg border"
             >
               Annuler
@@ -136,11 +156,13 @@ export default function CreateChatbotPage() {
 
             <button
               type="submit"
+              disabled={loading}
               className="px-5 py-2 bg-black text-white rounded-lg hover:opacity-90"
             >
-              🔒 Créer le chatbot
+              {loading ? "Création..." : "Créer le chatbot"}
             </button>
           </div>
+
         </form>
       </div>
     </div>

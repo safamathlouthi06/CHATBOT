@@ -15,14 +15,14 @@ export default function StatsPage() {
       <div>
         <h1 className="text-3xl font-bold">Statistiques</h1>
         <p className="text-gray-500 mt-2">
-          Vue globale des performances de vos chatbots
+          Vue globale des performances de vos chatbot
         </p>
       </div>
 
       {/* GLOBAL STATS */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
         <StatCard
-          title="Chatbots"
+          title="chatbot"
           value="3"
           icon={<Bot className="w-6 h-6 text-blue-500" />}
         />
@@ -50,7 +50,7 @@ export default function StatsPage() {
         <div className="p-6 border rounded-2xl bg-white dark:bg-gray-900">
           <h2 className="font-semibold mb-4 flex items-center gap-2">
             <BarChart3 className="w-5 h-5 text-blue-500" />
-            Utilisation des chatbots
+            Utilisation des chatbot
           </h2>
 
           <div className="space-y-4">

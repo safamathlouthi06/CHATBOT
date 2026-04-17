@@ -1,47 +1,64 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from database import supabase
 from schemas.chatbot import ChatbotCreate, ChatbotUpdate
+import traceback
+from auth import get_current_user
 
 router = APIRouter(prefix="/chatbot", tags=["chatbot"])
 
+TABLE = "chatbots"  # ✅ FIX ICI
 
-from fastapi import HTTPException
-import traceback
 
+# =========================
+# CREATE CHATBOT
+# =========================
 @router.post("/")
-def create_chatbot(data: ChatbotCreate):
+def create_chatbot(data: ChatbotCreate, current_user=Depends(get_current_user)):
     try:
-        response = supabase.table("chatbot").insert({
-            
+        entreprise_id = current_user["entreprise_id"]
+
+        response = supabase.table(TABLE).insert({
             "nom": data.nom,
             "domaine": data.domaine,
             "statut": data.statut,
-            "entreprise_id": data.entreprise_id
+            "entreprise_id": entreprise_id
         }).execute()
-
-        print("SUPABASE RESPONSE:", response)
 
         return {"message": "Chatbot créé", "data": response.data}
 
-    except Exception as e:
-        print("🔥 ERREUR SUPABASE:")
+    except Exception:
         print(traceback.format_exc())
+        raise HTTPException(status_code=500, detail="Erreur création chatbot")
 
-        raise HTTPException(status_code=500, detail=str(e))
 
-#GET ALL chatbot
+# =========================
+# GET MY CHATBOTS (SECURE)
+# =========================
 @router.get("/")
-def get_chatbot():
-    response = supabase.table("chatbot").select("*").execute()
-    return response.data
+def get_my_chatbots(current_user=Depends(get_current_user)):
+
+    entreprise_id = current_user["entreprise_id"]
+
+    response = supabase.table(TABLE) \
+        .select("*") \
+        .eq("entreprise_id", entreprise_id) \
+        .execute()
+
+    return response.data or []
 
 
-#GET CHATBOT BY ID
+# =========================
+# GET BY ID (SECURE)
+# =========================
 @router.get("/{chatbot_id}")
-def get_chatbot(chatbot_id: str):
-    response = supabase.table("chatbot") \
+def get_chatbot(chatbot_id: str, current_user=Depends(get_current_user)):
+
+    entreprise_id = current_user["entreprise_id"]
+
+    response = supabase.table(TABLE) \
         .select("*") \
         .eq("id", chatbot_id) \
+        .eq("entreprise_id", entreprise_id) \
         .execute()
 
     if not response.data:
@@ -50,25 +67,40 @@ def get_chatbot(chatbot_id: str):
     return response.data[0]
 
 
-#UPDATE CHATBOT
+# =========================
+# UPDATE
+# =========================
 @router.put("/{chatbot_id}")
-def update_chatbot(chatbot_id: str, data: ChatbotUpdate):
-    update_data = {k: v for k, v in data.dict().items() if v is not None}
+def update_chatbot(chatbot_id: str, data: ChatbotUpdate, current_user=Depends(get_current_user)):
 
-    response = supabase.table("chatbot") \
+    entreprise_id = current_user["entreprise_id"]
+
+    update_data = {
+        k: v for k, v in data.model_dump().items()
+        if v is not None
+    }
+
+    response = supabase.table(TABLE) \
         .update(update_data) \
         .eq("id", chatbot_id) \
+        .eq("entreprise_id", entreprise_id) \
         .execute()
 
     return {"message": "Chatbot mis à jour", "data": response.data}
 
 
-#DELETE CHATBOT
+# =========================
+# DELETE
+# =========================
 @router.delete("/{chatbot_id}")
-def delete_chatbot(chatbot_id: str):
-    response = supabase.table("chatbot") \
+def delete_chatbot(chatbot_id: str, current_user=Depends(get_current_user)):
+
+    entreprise_id = current_user["entreprise_id"]
+
+    response = supabase.table(TABLE) \
         .delete() \
         .eq("id", chatbot_id) \
+        .eq("entreprise_id", entreprise_id) \
         .execute()
 
     return {"message": "Chatbot supprimé"}
